@@ -6,26 +6,30 @@ import { addRowsToSheet } from '../utils/handleSheetService';
 
 import type { Ctx } from '../interfaces/builderbot.interface';
 
-export async function createUser(req: Request, res: Response): Promise<void> {
-  try {
-    const { from: number }: Ctx = req.body.ctx;
+// export async function createUser(req: Request, res: Response): Promise<void> {
+//   try {
+//     const { from: number }: Ctx = req.body.ctx;
     
     
-    const sheetRowID = crypto.randomUUID();
-    await addRowsToSheet('uuid', sheetRowID);
-    await addRowsToSheet('numero', number);
+//     const sheetRowID = crypto.randomUUID();
+//     await addRowsToSheet('uuid', sheetRowID);
+//     await addRowsToSheet('numero', number);
 
-    res.status(200).send('set user number');
-  } catch (error) {
-    handleHttpError(res, 'Cannot set user number');
-  };
-};
+//     res.status(200).send('set user number');
+//   } catch (error) {
+//     handleHttpError(res, 'Cannot set user number');
+//   };
+// };
 
 export async function setUserName(req: Request, res: Response): Promise<void> {
   try {
-    const { body: message }: Ctx = req.body.ctx;
+    const { from: number, body: message }: Ctx = req.body.ctx;
 
     await addRowsToSheet('nombre', message);
+
+    const sheetRowID = crypto.randomUUID();
+    await addRowsToSheet('uuid', sheetRowID);
+    await addRowsToSheet('numero', number);
 
     const response = {
       messages: [

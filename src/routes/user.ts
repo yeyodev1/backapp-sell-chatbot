@@ -1,7 +1,7 @@
 import express from 'express';
 
 import {
-	createUser,
+	// createUser,
 	setUserName,
 	setUserEmail,
 	setUserBusinessIndustry
@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post('/user', createUser);
+// router.post('/user', createUser);
 
 // form routes
 router.post('/user-set-name', setUserName);
