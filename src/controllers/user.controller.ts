@@ -25,10 +25,10 @@ export async function setUserName(req: Request, res: Response): Promise<void> {
   try {
     const { from: number, body: message }: Ctx = req.body.ctx;
 
-    await addRowsToSheet('nombre', message);
-
+    
     const sheetRowID = crypto.randomUUID();
     await addRowsToSheet('uuid', sheetRowID);
+    await addRowsToSheet('nombre', message);
     await addRowsToSheet('numero', number);
 
     const response = {
