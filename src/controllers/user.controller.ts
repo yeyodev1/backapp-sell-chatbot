@@ -25,12 +25,19 @@ export async function setUserName(req: Request, res: Response): Promise<void> {
   try {
     const { body: message }: Ctx = req.body.ctx;
 
-
     await addRowsToSheet('nombre', message);
 
-    res.status(200).send('data setted');
+    const response = {
+      messages: [
+        {
+          type: 'to_user',
+          content: 'Tu nombre fue registrado'
+        }
+      ],
+    };
+
+    res.status(200).send(response);
   } catch (error) {
-    console.error('errosote: ', error)
     handleHttpError(res, 'cannot set user name');
   };
 };
