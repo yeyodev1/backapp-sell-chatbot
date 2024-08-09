@@ -1,0 +1,10 @@
+.env
+node_modules
+package-lock.json
+dist/
+gcpFilename.json
+
+pnpm-lock.yaml
+.vercel
+
+bot-schedule***
