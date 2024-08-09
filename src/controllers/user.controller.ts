@@ -69,44 +69,30 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
 
     res.status(200).send(response);
   } catch (error) {
-    handleHttpError(res, 'cannot set user patient');
+    handleHttpError(res, 'cannot set user email');
   };
 };
 
-export async function setUserLocation(req: Request, res: Response): Promise<void> {
+export async function setUserBusinessIndustry(req: Request, res: Response): Promise<void> {
   try {
-    const { from: number, body: message } : Ctx = req.body.ctx;
+    const { body: message } : Ctx = req.body.ctx;
 
-    const user = await models.user.findOne({ cellphone: number });
-    
-    if(!user) {
-      return handleHttpError(res, 'cannot found user', 404);
-    };
 
-    const userSedes = await sheetService.getSheetData(1);
-    console.log('user sedes', userSedes);
+    await addRowsToSheet('industria del negocio', message);
 
-    const locationParsed = await ai.createChat([
-      {
-        role: 'assistant',
-        content: prompts.parseUserLocation.replace('{userMessage}', message).replace('{userSedes}', String(userSedes))
-      }
-    ]);
+    const formattedDate = new Date().toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
 
-    let messageToUser = '';
-    
-    if (locationParsed != 'BOGOTÁ') {
-      messageToUser = `¡Perfecto! Tu ubicación fue tomada 📍.\n\nUbicación seleccionada: ${locationParsed}`
-      await addRowsToSheet('sede escogida', locationParsed!);
-    } else {
-      messageToUser = 'Por favor, especifica tu ubicación 📍.'
-    }
+    await addRowsToSheet('fecha del chat', formattedDate);
 
     const response = {
       messages: [
         {
           type: 'to_user',
-          content: messageToUser
+          content: 'La industria fue registrada'
         }
       ],
     }
@@ -118,68 +104,70 @@ export async function setUserLocation(req: Request, res: Response): Promise<void
   };
 };
 
-export async function showLocationDates(req: Request, res: Response): Promise<void> {
-  try {
-    const availableDays = `*Días disponibles:*\n- Lunes: 9:00 AM - 4:30 PM\n- Martes: 9:00 AM - 4:30 PM\n- Miércoles: 9:00 AM - 4:30 PM\n- Jueves: 9:00 AM - 4:30 PM\n- Viernes: 9:00 AM - 4:30 PM`;
 
-    const response = {
-      messages: [
-        {
-          type: 'to_user',
-          content: availableDays
-        }
-      ],
-    }
-    res.status(200).send(response);
-  } catch (error) {
-    handleHttpError(res, 'cannot show dates');
-  };
-};
 
-export async function setLocationDate(req: Request, res: Response): Promise <void> {
-  try {
-    const { from: number, body: message } : Ctx = req.body.ctx;
+// export async function showLocationDates(req: Request, res: Response): Promise<void> {
+//   try {
+//     const availableDays = `*Días disponibles:*\n- Lunes: 9:00 AM - 4:30 PM\n- Martes: 9:00 AM - 4:30 PM\n- Miércoles: 9:00 AM - 4:30 PM\n- Jueves: 9:00 AM - 4:30 PM\n- Viernes: 9:00 AM - 4:30 PM`;
 
-    const user = await models.user.findOne({ cellphone: number });
+//     const response = {
+//       messages: [
+//         {
+//           type: 'to_user',
+//           content: availableDays
+//         }
+//       ],
+//     }
+//     res.status(200).send(response);
+//   } catch (error) {
+//     handleHttpError(res, 'cannot show dates');
+//   };
+// };
+
+// export async function setLocationDate(req: Request, res: Response): Promise <void> {
+//   try {
+//     const { from: number, body: message } : Ctx = req.body.ctx;
+
+//     const user = await models.user.findOne({ cellphone: number });
     
-    if(!user) {
-      return handleHttpError(res, 'cannot found user', 404);
-    };
+//     if(!user) {
+//       return handleHttpError(res, 'cannot found user', 404);
+//     };
 
-    let userMessage = ''
+//     let userMessage = ''
 
-    const dateParsed = await ai.createChat([
-      {
-        role: 'assistant',
-        content: prompts.parseUserDateSelected.replace('{userMessage}', message).replace('{date}', String(new Date()))
-      }
-    ]);
+//     const dateParsed = await ai.createChat([
+//       {
+//         role: 'assistant',
+//         content: prompts.parseUserDateSelected.replace('{userMessage}', message).replace('{date}', String(new Date()))
+//       }
+//     ]);
 
-    if(dateParsed === 'not_possible') {
-      userMessage = 'Escoge otra fecha por favor 🙁'
-    } else {
-      userMessage = `El dia agendado fue ${dateParsed}`
-    }
+//     if(dateParsed === 'not_possible') {
+//       userMessage = 'Escoge otra fecha por favor 🙁'
+//     } else {
+//       userMessage = `El dia agendado fue ${dateParsed}`
+//     }
 
-    // const date = extractDayFromMessage(dateParsed as string);
+//     // const date = extractDayFromMessage(dateParsed as string);
 
-    // console.log('date: ', date);
+//     // console.log('date: ', date);
 
-    await addRowsToSheet('dia escogido', dateParsed as string);
+//     await addRowsToSheet('dia escogido', dateParsed as string);
     
-    const response = {
-      messages: [
-        {
-          type: 'to_user',
-          content: userMessage
-        }
-      ],
-      userMessage
-    }
+//     const response = {
+//       messages: [
+//         {
+//           type: 'to_user',
+//           content: userMessage
+//         }
+//       ],
+//       userMessage
+//     }
 
-    res.status(200).send(response);
-  } catch (error) {
-    console.error('errosote: ', error)
-    handleHttpError(res, 'cannot set location date');
-  }
-}
+//     res.status(200).send(response);
+//   } catch (error) {
+//     console.error('errosote: ', error)
+//     handleHttpError(res, 'cannot set location date');
+//   }
+// }
