@@ -34,6 +34,7 @@ export async function setUserName(req: Request, res: Response): Promise<void> {
           content: 'Tu nombre fue registrado'
         }
       ],
+      allow: 'allow'
     };
 
     res.status(200).send(response);
