@@ -1,17 +1,10 @@
 import crypto from 'node:crypto';
 import { Request, response, Response } from 'express';
 
-import prompts from '../utils/prompts';
-import AIClass from '../services/openai.class';
 import handleHttpError from '../utils/handleError';
 import { addRowsToSheet } from '../utils/handleSheetService';
-import GoogleSheetService from '../services/spreadsheets';
 
 import type { Ctx } from '../interfaces/builderbot.interface';
-
-const ai = new AIClass(process.env.OPEN_AI_KEY!)
-const sheetService = new GoogleSheetService();
-
 
 export async function createUser(req: Request, res: Response): Promise<void> {
   try {
