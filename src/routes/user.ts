@@ -14,7 +14,7 @@ router.post('/user', createUser);
 // form routes
 router.post('/user-set-name', setUserName);
 router.post('/user-set-email', setUserEmail);
-router.post('user-set-business-industry', setUserBusinessIndustry)
+router.post('/user-set-business-industry', setUserBusinessIndustry)
 // router.post('/user-set-ask-location', setUserLocation);
 
 

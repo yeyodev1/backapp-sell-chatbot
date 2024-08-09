@@ -66,6 +66,7 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
           content: messageToUser
         }
       ],
+      allow: 'allow'
     };
 
     res.status(200).send(response);
