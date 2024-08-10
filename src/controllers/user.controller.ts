@@ -62,7 +62,7 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
       allow = 'no_allow'
     } else {
       messageToUser =  ''
-      allow = 'allow'
+      allow = 'si'
       await addRowsToSheet('email', message);
     }
 
