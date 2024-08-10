@@ -55,11 +55,14 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
     const foundEmail = message.match(emailRegex);
 
     let messageToUser = ''
+    let allow = ''
 
     if (!foundEmail) {
       messageToUser = 'No reconozco el email, coloca uno válido por favor'
+      allow = 'no_allow'
     } else {
-      messageToUser =  'Tu email fue registrado'
+      messageToUser =  ''
+      allow = 'allow'
       await addRowsToSheet('email', message);
     }
 
@@ -70,7 +73,7 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
           content: messageToUser
         }
       ],
-      allow: 'allow'
+      allow
     };
 
     res.status(200).send(response);
@@ -98,7 +101,7 @@ export async function setUserBusinessIndustry(req: Request, res: Response): Prom
       messages: [
         {
           type: 'to_user',
-          content: 'La industria fue registrada'
+          content: ''
         }
       ],
     }
