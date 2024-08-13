@@ -66,6 +66,7 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
       await addRowsToSheet('email', message);
     }
 
+
     const response = {
       messages: [
         {
@@ -73,7 +74,7 @@ export async function setUserEmail(req: Request, res: Response): Promise<void> {
           content: messageToUser
         }
       ],
-      allow
+      allow: 'si'
     };
 
     res.status(200).send(response);
